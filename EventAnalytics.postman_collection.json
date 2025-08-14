@@ -1,0 +1,361 @@
+{
+  "info": {
+    "name": "Event Analytics API",
+    "description": "Postman collection for Event Analytics platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "POST /api/events",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "x-api-key", "value": "YOUR_API_KEY" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"events\": [\n    { \"userId\": \"user_1\", \"eventName\": \"signup\", \"orgId\": \"org_1\", \"projectId\": \"proj_1\", \"timestamp\": \"2025-08-14T10:00:00Z\" }\n  ]\n}"
+        },
+        "url": { "raw": "http://localhost:5000/api/events", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "events"] }
+      },
+      "response": [{
+    "success": true,
+    "accepted": 1
+}]
+    },
+    {
+      "name": "GET /api/analytics/metrics",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "x-api-key", "value": "YOUR_API_KEY" }],
+        "url": {
+          "raw": "http://localhost:5000/api/analytics/metrics?event=signup&interval=daily&orgId=org_1&projectId=proj_1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "analytics", "metrics"],
+          "query": [
+            { "key": "event", "value": "signup" },
+            { "key": "interval", "value": "daily" },
+            { "key": "orgId", "value": "org_1" },
+            { "key": "projectId", "value": "proj_1" }
+          ]
+        }
+      },
+      "response": [{
+    "success": true,
+    "event": "page_view",
+    "interval": "daily",
+    "data": [
+        {
+            "count": 2,
+            "period": "2025-08-11"
+        },
+        {
+            "count": 1,
+            "period": "2025-08-12"
+        }
+    ]
+}]
+    },
+    {
+      "name": "POST /api/analytics/funnels",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "x-api-key", "value": "YOUR_API_KEY" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"steps\": [\"signup\", \"page_view\", \"purchase\"],\n  \"orgId\": \"org_1\",\n  \"projectId\": \"proj_1\",\n  \"startDate\": \"2025-08-01\",\n  \"endDate\": \"2025-08-14\"\n}"
+        },
+        "url": { "raw": "http://localhost:5000/api/analytics/funnels", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "analytics", "funnels"] }
+      },
+      "response": [{
+    "success": true,
+    "totalUsers": 4,
+    "steps": [
+        {
+            "step": "signup",
+            "users": 4,
+            "users_in_order": 4
+        },
+        {
+            "step": "verify",
+            "users": 0,
+            "users_in_order": 0
+        },
+        {
+            "step": "purchase",
+            "users": 0,
+            "users_in_order": 0
+        }
+    ]
+}]
+    },
+    {
+      "name": "GET /api/analytics/retention",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "x-api-key", "value": "YOUR_API_KEY" }],
+        "url": {
+          "raw": "http://localhost:5000/api/analytics/retention?cohort=signup&days=7&orgId=org_1&projectId=proj_1&startDate=2025-08-14",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "analytics", "retention"],
+          "query": [
+            { "key": "cohort", "value": "signup" },
+            { "key": "days", "value": "7" },
+            { "key": "orgId", "value": "org_1" },
+            { "key": "projectId", "value": "proj_1" },
+            { "key": "startDate", "value": "2025-08-14" }
+          ]
+        }
+      },
+      "response": [{
+    "success": true,
+    "cohortSize": 0,
+    "retention": []
+}]
+    },
+    {
+      "name": "GET /api/analytics/users/:id/journey",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "x-api-key", "value": "YOUR_API_KEY" }],
+        "url": {
+          "raw": "http://localhost:5000/api/analytics/users/user_abc/journey?orgId=org_1&projectId=proj_1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "analytics", "users", "user_1", "journey"],
+          "query": [
+            { "key": "orgId", "value": "org_1" },
+            { "key": "projectId", "value": "proj_1" }
+          ]
+        }
+      },
+      "response": [{
+    "success": true,
+    "events": [
+        {
+            "_id": "689b57c34f7f5499c01e41ca",
+            "orgId": "org_1",
+            "projectId": "proj_1",
+            "eventId": "evt_abc_001",
+            "eventName": "page_view",
+            "userId": "user_123",
+            "metadata": {
+                "page": "/home",
+                "browser": "Chrome"
+            },
+            "timestamp": "2025-08-11T19:46:33.338Z",
+            "eventHash": null,
+            "createdAt": "2025-08-12T15:03:31.333Z",
+            "__v": 0
+        },
+        {
+            "_id": "689cf4ff6f03a426860ac7a0",
+            "projectId": "proj_1",
+            "eventHash": "72035649faada67e4344149e3be4dce5fe22a9e1a64614104bbbbf7503b14c38",
+            "orgId": "org_1",
+            "__v": 0,
+            "createdAt": "2025-08-13T20:26:39.030Z",
+            "eventId": null,
+            "eventName": "page_view",
+            "metadata": {
+                "page": "/"
+            },
+            "timestamp": "2025-08-12T12:05:00.000Z",
+            "userId": "user_abc"
+        },
+        {
+            "_id": "689cf4ff6f03a426860ac7a1",
+            "projectId": "proj_1",
+            "eventHash": "c46346f781a0586bdbbf8001d14f149b1a850fedcb3faf4b25ed95b573014564",
+            "orgId": "org_1",
+            "__v": 0,
+            "createdAt": "2025-08-13T20:26:39.030Z",
+            "eventId": null,
+            "eventName": "button_click",
+            "metadata": {
+                "buttonId": "signup"
+            },
+            "timestamp": "2025-08-12T12:06:00.000Z",
+            "userId": "user_abc"
+        },
+        {
+            "_id": "689cf4ff6f03a426860ac7a2",
+            "projectId": "proj_1",
+            "eventHash": "ba3b3ea9ee82c77131aba9dc43120fcd480b33aeca4387ca0fdd67832b24ddd2",
+            "orgId": "org_1",
+            "__v": 0,
+            "createdAt": "2025-08-13T20:26:39.030Z",
+            "eventId": null,
+            "eventName": "form_submit",
+            "metadata": {
+                "formId": "contact"
+            },
+            "timestamp": "2025-08-12T12:07:00.000Z",
+            "userId": "user_abc"
+        },
+        {
+            "_id": "689dc55d6f03a426860adf28",
+            "projectId": "proj_1",
+            "eventHash": "225d3b57227584a1a22e14bd11f7cbc766cd93e854e79ca5cde1b9d8fb5e85c8",
+            "orgId": "org_1",
+            "__v": 0,
+            "createdAt": "2025-08-14T11:15:41.316Z",
+            "eventId": null,
+            "eventName": "signup",
+            "metadata": {},
+            "timestamp": "2025-08-12T12:00:00.000Z",
+            "userId": "user_xyz"
+        },
+        {
+            "_id": "689dc55d8077a59c765be73d",
+            "orgId": "org_1",
+            "projectId": "proj_1",
+            "eventId": null,
+            "eventName": "signup",
+            "userId": "user_xyz",
+            "timestamp": "2025-08-12T12:00:00.000Z",
+            "eventHash": "225d3b57227584a1a22e14bd11f7cbc766cd93e854e79ca5cde1b9d8fb5e85c8",
+            "createdAt": "2025-08-14T11:15:41.316Z",
+            "__v": 0
+        },
+        {
+            "_id": "689dca11f8dfada924a6951b",
+            "orgId": "org_1",
+            "projectId": "proj_1",
+            "eventId": "evt1",
+            "eventName": "page_view",
+            "userId": "user_abc",
+            "metadata": {
+                "page": "/home"
+            },
+            "timestamp": "2025-08-11T10:00:00.000Z",
+            "createdAt": "2025-08-14T11:35:45.263Z"
+        },
+        {
+            "_id": "689dca11f8dfada924a6951c",
+            "orgId": "org_1",
+            "projectId": "proj_1",
+            "eventId": "evt2",
+            "eventName": "button_click",
+            "userId": "user_abc",
+            "metadata": {
+                "buttonId": "signup"
+            },
+            "timestamp": "2025-08-11T10:05:00.000Z",
+            "createdAt": "2025-08-14T11:35:45.264Z"
+        },
+        {
+            "_id": "689dca11f8dfada924a6951d",
+            "orgId": "org_1",
+            "projectId": "proj_1",
+            "eventId": "evt3",
+            "eventName": "form_submit",
+            "userId": "user_abc",
+            "metadata": {
+                "formId": "contact"
+            },
+            "timestamp": "2025-08-11T10:06:00.000Z",
+            "createdAt": "2025-08-14T11:35:45.265Z"
+        },
+        {
+            "_id": "689dd9899ad8185af85e9417",
+            "userId": "user_1",
+            "eventName": "signup",
+            "timestamp": "2025-08-07T10:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e9418",
+            "userId": "user_2",
+            "eventName": "signup",
+            "timestamp": "2025-08-07T11:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e9419",
+            "userId": "user_3",
+            "eventName": "signup",
+            "timestamp": "2025-08-07T12:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e941a",
+            "userId": "user_1",
+            "eventName": "login",
+            "timestamp": "2025-08-08T09:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e941b",
+            "userId": "user_2",
+            "eventName": "login",
+            "timestamp": "2025-08-08T10:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e941c",
+            "userId": "user_1",
+            "eventName": "login",
+            "timestamp": "2025-08-09T08:30:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e941d",
+            "userId": "user_2",
+            "eventName": "login",
+            "timestamp": "2025-08-10T14:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e941e",
+            "userId": "user_3",
+            "eventName": "login",
+            "timestamp": "2025-08-11T16:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e941f",
+            "userId": "user_1",
+            "eventName": "login",
+            "timestamp": "2025-08-12T09:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e9420",
+            "userId": "user_2",
+            "eventName": "login",
+            "timestamp": "2025-08-13T10:30:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        },
+        {
+            "_id": "689dd9899ad8185af85e9421",
+            "userId": "user_3",
+            "eventName": "login",
+            "timestamp": "2025-08-14T11:00:00.000Z",
+            "orgId": "org_1",
+            "projectId": "proj_1"
+        }
+    ]
+}]
+    }
+  ]
+}
