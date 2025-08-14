@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import { setupSwagger } from './config/swagger';
 import { connectDB } from './config/db';
 import eventRoutes from './routes/eventRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
@@ -14,15 +15,16 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: "http://localhost:3000", // your frontend
+  origin: "http://localhost:3000", // frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "x-api-key"]
 }));
+setupSwagger(app);
 
 // Middleware
-app.use(helmet());         // Security headers
-app.use(morgan('dev'));    // Logging
-app.use(express.json());    // Parse JSON
+app.use(helmet());         
+app.use(morgan('dev'));    
+app.use(express.json());    
 
 // DB Connection
 connectDB();
@@ -32,6 +34,8 @@ app.use(globalLimiter);
 
 // Protect /api/* with API key + per-key limiter BEFORE mounting routes
 app.use('/api', apiKeyAuth, perKeyLimiter);
+
+
 
 
 // Routes
