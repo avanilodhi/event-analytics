@@ -191,22 +191,17 @@ GET /api/analytics/retention?cohort=signup&startDate=YYYY-MM-DD&days=7&orgId=org
 
 ---
 
+## Swagger / OpenAPI
+
+- Swagger UI available at: http://localhost:5000/api/docs
+- Access with API key header: x-api-key: <dev_key_1>
+- Swagger setup uses swagger-jsdoc + swagger-ui-express in src/config/swagger.ts.
+- Example YAML/JSON endpoints auto-documented from JSDoc comments in routes files.
+
 ## Postman / API Test Suite
 
 - Include a Postman collection to test all endpoints with sample events.
 - Save as `EventAnalytics.postman_collection.json` in the repo.
-
-
----
-
-## Submission Notes
-
-- Modular backend code using TypeScript + Node.js (Express)
-- MongoDB schema design & indexing implemented
-- REST APIs with authentication & rate-limiting
-- OpenAPI/Swagger documentation can be added if required
-- Scripts for local setup and fake event seeding included
-- Frontend dashboard ready for metrics visualization
 
 ---
 
